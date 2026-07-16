@@ -17,17 +17,17 @@ import yaml
 CONFIG_DIRECTORY = "configs"
 CONFIG_FILE_NAME = "generator.yml"
 
-REQUIRED_KEYS = [
+REQUIRED_KEYS = (
     "environment",
     "generation",
     "datasets",
     "output",
-]
-
+)
 
 # ==========================================================
 # Configuration Manager
 # ==========================================================
+
 
 class ConfigManager:
     """
@@ -43,6 +43,14 @@ class ConfigManager:
     """
 
     def __init__(self, config_path: Path):
+        """
+        Initialize the configuration manager.
+
+        Parameters
+        ----------
+        config_path : Path
+            Path to the YAML configuration file.
+        """
         self.config_path = config_path
         self.config = self._load_config()
 
@@ -58,11 +66,10 @@ class ConfigManager:
         Raises
         ------
         FileNotFoundError
-            If configuration file does not exist.
+            If the configuration file does not exist.
 
         ValueError
-            If configuration file is empty or missing
-            required sections.
+            If the configuration file is empty or invalid.
         """
 
         if not self.config_path.exists():
@@ -74,7 +81,6 @@ class ConfigManager:
             mode="r",
             encoding="utf-8",
         ) as file:
-
             config = yaml.safe_load(file)
 
         if not config:
@@ -121,13 +127,13 @@ class ConfigManager:
         Parameters
         ----------
         key : str
-            Configuration key.
+            Configuration key using dot notation.
 
             Example:
             datasets.customers.records
 
         default : Any, optional
-            Default value if key does not exist.
+            Default value returned if the key does not exist.
 
         Returns
         -------
@@ -149,6 +155,15 @@ class ConfigManager:
 
         return value
 
+    def reload(self) -> None:
+        """
+        Reload the configuration from disk.
+
+        Useful during development if the YAML configuration
+        changes while the application is running.
+        """
+        self.config = self._load_config()
+
 
 # ==========================================================
 # Singleton Configuration Instance
@@ -161,3 +176,8 @@ CONFIG_PATH = (
 )
 
 config = ConfigManager(CONFIG_PATH)
+
+__all__ = [
+    "ConfigManager",
+    "config",
+]
