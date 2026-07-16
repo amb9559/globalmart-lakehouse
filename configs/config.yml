@@ -1,0 +1,23 @@
+project:
+  name: GlobalMart Lakehouse
+
+environment: dev
+
+paths:
+  output: data/generated
+  logs: logs
+  format:
+    - csv
+    - parquet
+
+datasets:
+  categories:
+    records: 50
+  suppliers:
+    records: 500
+  products:
+    records: 100000
+  warehouses:
+    records: 25
+  customers:
+    records: 500000
