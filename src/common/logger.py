@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 
 # Create Log History
-LOG_DIR = Path(__line__).resolve().parents[2] / "logs"
+LOG_DIR = Path(__file__).resolve().parents[2] / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 # Log File Location
@@ -25,7 +25,7 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # Create Logger
 
-def get_logger(name: str) -> logging.logger:
+def get_logger(name: str) -> logging.Logger:
     """
     Create and return a configured logger.
 
@@ -47,7 +47,7 @@ def get_logger(name: str) -> logging.logger:
     
     logger.setLevel(logging.INFO)
 
-`   formatter = logging.Formatter(
+    formatter = logging.Formatter(
         fmt = LOG_FORMAT,
         datefmt = DATE_FORMAT,
     )
@@ -65,11 +65,11 @@ def get_logger(name: str) -> logging.logger:
     console_handler = logging.StreamHandler()
 
     console_handler.setLevel(logging.INFO)
-    console.handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
 
     # Add Handler
     logger.addHandler(file_handler)
-    logger.addHandler(condole_handler)
+    logger.addHandler(console_handler)
 
     # Prevent logging from propagating to the root logger
     logger.propagate = False
